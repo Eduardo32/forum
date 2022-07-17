@@ -1,6 +1,8 @@
 package com.pauloeduardocosta.forum.config.security;
 
 import com.pauloeduardocosta.forum.repository.IUsuarioRepository;
+import com.pauloeduardocosta.forum.service.TokenServise;
+import com.pauloeduardocosta.forum.service.UsuarioDetalhesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private AutenticacaoService autenticacaoService;
+    private UsuarioDetalhesService usuarioDetalhesService;
 
     @Autowired
     private TokenServise tokenService;
@@ -36,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(autenticacaoService).passwordEncoder(new BCryptPasswordEncoder());
+        auth.userDetailsService(usuarioDetalhesService).passwordEncoder(new BCryptPasswordEncoder());
     }
 
     @Override

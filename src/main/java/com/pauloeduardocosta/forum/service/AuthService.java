@@ -1,8 +1,8 @@
 package com.pauloeduardocosta.forum.service;
 
-import com.pauloeduardocosta.forum.config.security.TokenServise;
 import com.pauloeduardocosta.forum.dto.LoginDTO;
 import com.pauloeduardocosta.forum.dto.TokenDTO;
+import com.pauloeduardocosta.forum.model.enums.ETipoToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,6 +23,6 @@ public class AuthService {
         Authentication authenticate = authenticationManager.authenticate(dadosLogin);
         String token = tokenService.gerarToken(authenticate);
 
-        return new TokenDTO(token, "Bearer");
+        return new TokenDTO(token, ETipoToken.BEARER.getDescricao());
     }
 }

@@ -2,10 +2,10 @@
 INSERT INTO perfis(nome) VALUES('ROLE_USUARIO');
 INSERT INTO perfis(nome) VALUES('ROLE_ADMIN');
 
-INSERT INTO usuarios(nome, email, senha) VALUES('Administrador', 'admin@email.com', '$2a$10$..BbYZDEPCujwGSDt.DUOOKFvj6WPJL23X4rHOUuO1Rsdr./oUjiC');
-INSERT INTO usuarios(nome, email, senha) VALUES('Usuario 01', 'usuario01@email.com', '$2a$10$..BbYZDEPCujwGSDt.DUOOKFvj6WPJL23X4rHOUuO1Rsdr./oUjiC');
-INSERT INTO usuarios(nome, email, senha) VALUES('Usuario 02', 'usuario02@email.com', '$2a$10$..BbYZDEPCujwGSDt.DUOOKFvj6WPJL23X4rHOUuO1Rsdr./oUjiC');
-INSERT INTO usuarios(nome, email, senha) VALUES('Eu', 'eu@email.com', '$2a$10$..BbYZDEPCujwGSDt.DUOOKFvj6WPJL23X4rHOUuO1Rsdr./oUjiC');
+INSERT INTO usuarios(nome, email, username, senha) VALUES('Administrador', 'admin@email.com', 'admin', '$2a$10$..BbYZDEPCujwGSDt.DUOOKFvj6WPJL23X4rHOUuO1Rsdr./oUjiC');
+INSERT INTO usuarios(nome, email, username, senha) VALUES('Usuario 01', 'usuario01@email.com', 'usuario01', '$2a$10$..BbYZDEPCujwGSDt.DUOOKFvj6WPJL23X4rHOUuO1Rsdr./oUjiC');
+INSERT INTO usuarios(nome, email, username, senha) VALUES('Usuario 02', 'usuario02@email.com', 'usuario02', '$2a$10$..BbYZDEPCujwGSDt.DUOOKFvj6WPJL23X4rHOUuO1Rsdr./oUjiC');
+INSERT INTO usuarios(nome, email, username, senha) VALUES('Eu', 'eu@email.com', 'eu', '$2a$10$..BbYZDEPCujwGSDt.DUOOKFvj6WPJL23X4rHOUuO1Rsdr./oUjiC');
 
 INSERT INTO usuarios_perfis(usuario_id, perfis_id) VALUES(1, 2);
 INSERT INTO usuarios_perfis(usuario_id, perfis_id) VALUES(2, 1);

@@ -1,5 +1,6 @@
-package com.pauloeduardocosta.forum.config.security;
+package com.pauloeduardocosta.forum.service;
 
+import com.pauloeduardocosta.forum.data.UsuarioDetalhes;
 import com.pauloeduardocosta.forum.model.Usuario;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -20,7 +21,8 @@ public class TokenServise {
     private String secret;
 
     public String gerarToken(Authentication authenticate) {
-        Usuario usuario = (Usuario) authenticate.getPrincipal();
+        UsuarioDetalhes usuarioDetalhes = (UsuarioDetalhes) authenticate.getPrincipal();
+        Usuario usuario = usuarioDetalhes.getUsuario().get();
         Date hoje = new Date();
         Date exp = new Date(hoje.getTime() + expiration);
 

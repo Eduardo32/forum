@@ -1,5 +1,6 @@
 package com.pauloeduardocosta.forum.service;
 
+import com.pauloeduardocosta.forum.data.UsuarioDetalhes;
 import com.pauloeduardocosta.forum.dto.AtualizarTopicoDTO;
 import com.pauloeduardocosta.forum.dto.NovoTopicoDTO;
 import com.pauloeduardocosta.forum.dto.TopicoCompletoDTO;
@@ -50,8 +51,8 @@ public class TopicoService {
 
     @Transactional
     public TopicoCompletoDTO criarTopico(NovoTopicoDTO novoTopicoDTO) {
-        Usuario usuario = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Topico topico = new Topico(novoTopicoDTO.getTitulo(), novoTopicoDTO.getMensagem(), usuario);
+        Optional<Usuario> usuario = (Optional<Usuario>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Topico topico = new Topico(novoTopicoDTO.getTitulo(), novoTopicoDTO.getMensagem(), usuario.get());
         topicoRepository.save(topico);
         return new TopicoCompletoDTO(topico);
     }
@@ -128,8 +129,8 @@ public class TopicoService {
     }
 
     private void validarAutor(Long autorId) {
-        Usuario usuario = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(usuario.getId() != autorId) {
+        Optional<Usuario> usuario = (Optional<Usuario>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(usuario.get().getId() != autorId) {
             throw new UsuarioNaoEAutorException("Esse usuario não é o autor desse topico.");
         }
     }

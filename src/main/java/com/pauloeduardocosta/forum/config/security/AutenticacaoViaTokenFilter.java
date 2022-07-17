@@ -1,7 +1,9 @@
 package com.pauloeduardocosta.forum.config.security;
 
+import com.pauloeduardocosta.forum.data.UsuarioDetalhes;
 import com.pauloeduardocosta.forum.model.Usuario;
 import com.pauloeduardocosta.forum.repository.IUsuarioRepository;
+import com.pauloeduardocosta.forum.service.TokenServise;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -11,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 
 public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
@@ -36,9 +39,10 @@ public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
 
     private void autenticarCliente(String token) {
         Long idUsuario = tokenService.getIdUsuario(token);
-        Usuario usuario = usuarioRepository.findById(idUsuario).get();
+        Optional<Usuario> usuario = usuarioRepository.findById(idUsuario);
+        UsuarioDetalhes usuarioDetalhes = new UsuarioDetalhes(usuario);
         UsernamePasswordAuthenticationToken authentication =
-                new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
+                new UsernamePasswordAuthenticationToken(usuario, null, usuarioDetalhes.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
