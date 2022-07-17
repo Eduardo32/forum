@@ -42,11 +42,9 @@ public class TopicoService {
         return TopicoDTO.converter(topicos);
     }
 
-    public TopicoCompletoDTO buscarTopicoPorId(Long id) {
-        Optional<Topico> topico = topicoRepository.findById(id);
-        return new TopicoCompletoDTO(topico.orElseThrow(() -> new ObjetoNaoEncotradoException("Topico com id: " + id + " não encontrado.")));
+    public TopicoCompletoDTO buscarTopicoPorId(Long topicoId) {
+        return new TopicoCompletoDTO(buscarTopico(topicoId));
     }
-
 
     @Transactional
     public TopicoCompletoDTO criarTopico(NovoTopicoDTO novoTopicoDTO) {
@@ -64,7 +62,7 @@ public class TopicoService {
         topico.getRespostas().forEach(resposta -> resposta.setSolucao(false));
         Optional<Resposta> resposta = topico.getRespostas().stream().filter(r -> r.getId() == respostaId).findFirst();
 
-        if(!resposta.isPresent()) {
+        if(resposta.isEmpty()) {
             throw new ObjetoNaoEncotradoException("Resposta com id " + respostaId + " não encontrado.");
         }
 
@@ -105,6 +103,7 @@ public class TopicoService {
         return new TopicoCompletoDTO(topico);
     }
 
+    @Transactional
     public TopicoCompletoDTO reabrirTopico(Long topicoId) {
         Topico topico = buscarTopico(topicoId);
         topico.setStatus(topico.getRespostas().size() == 0 ? EStatusTopico.NAO_RESPONDIDO : EStatusTopico.NAO_SOLUCIONADO);
@@ -119,10 +118,6 @@ public class TopicoService {
 
     private Topico buscarTopico(Long topicoId) {
         Optional<Topico> topico = topicoRepository.findById(topicoId);
-        if(!topico.isPresent()) {
-            throw new ObjetoNaoEncotradoException("Topico com id " + topicoId + " não encontrado.");
-        }
-
-        return topico.get();
+        return topico.orElseThrow(() -> new ObjetoNaoEncotradoException("Topico com id: " + topicoId + " não encontrado."));
     }
 }

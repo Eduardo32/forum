@@ -1,20 +1,16 @@
 package com.pauloeduardocosta.forum.rs;
 
-
 import com.pauloeduardocosta.forum.dto.AtualizarTopicoDTO;
 import com.pauloeduardocosta.forum.dto.NovoTopicoDTO;
-import com.pauloeduardocosta.forum.dto.RespostaDTO;
 import com.pauloeduardocosta.forum.dto.TopicoCompletoDTO;
 import com.pauloeduardocosta.forum.dto.TopicoDTO;
 import com.pauloeduardocosta.forum.service.TopicoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

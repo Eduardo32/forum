@@ -1,7 +1,5 @@
 package com.pauloeduardocosta.forum.dto;
 
-
-
 import com.pauloeduardocosta.forum.model.Usuario;
 
 import java.util.List;
