@@ -12,9 +12,11 @@ import com.pauloeduardocosta.forum.repository.IRespostaRepository;
 import com.pauloeduardocosta.forum.repository.ITopicoRepository;
 import com.pauloeduardocosta.forum.repository.IUsuarioRepository;
 import com.pauloeduardocosta.forum.service.exception.ObjetoNaoEncotradoException;
+import com.pauloeduardocosta.forum.service.exception.UsuarioNaoEAutorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,9 +50,8 @@ public class TopicoService {
 
     @Transactional
     public TopicoCompletoDTO criarTopico(NovoTopicoDTO novoTopicoDTO) {
-        //TODO: devera pegar o usuario logado
-        Optional<Usuario> usuario = usuarioRepository.findById(novoTopicoDTO.getIdUsuario());
-        Topico topico = new Topico(novoTopicoDTO.getTitulo(), novoTopicoDTO.getMensagem(), usuario.get());
+        Usuario usuario = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Topico topico = new Topico(novoTopicoDTO.getTitulo(), novoTopicoDTO.getMensagem(), usuario);
         topicoRepository.save(topico);
         return new TopicoCompletoDTO(topico);
     }
@@ -58,6 +59,7 @@ public class TopicoService {
     @Transactional
     public TopicoCompletoDTO marcarTopicoComoSolucionado(Long topicoId, Long respostaId) {
         Topico topico = buscarTopico(topicoId);
+        validarAutor(topico.getAutor().getId());
 
         topico.getRespostas().forEach(resposta -> resposta.setSolucao(false));
         Optional<Resposta> resposta = topico.getRespostas().stream().filter(r -> r.getId() == respostaId).findFirst();
@@ -75,6 +77,7 @@ public class TopicoService {
     @Transactional
     public TopicoCompletoDTO marcarTopicoComoNaoSolucionado(Long topicoId) {
         Topico topico = buscarTopico(topicoId);
+        validarAutor(topico.getAutor().getId());
 
         topico.getRespostas().forEach(resposta -> resposta.setSolucao(false));
         topico.setStatus(EStatusTopico.NAO_SOLUCIONADO);
@@ -85,6 +88,7 @@ public class TopicoService {
     @Transactional
     public TopicoCompletoDTO atualizarTopico(Long id, AtualizarTopicoDTO atualizarTopicoDTO) {
         Topico topico = buscarTopico(id);
+        validarAutor(topico.getAutor().getId());
 
         if(atualizarTopicoDTO.getTitulo() != null && !atualizarTopicoDTO.getTitulo().isBlank()) {
             topico.setTitulo(atualizarTopicoDTO.getTitulo());
@@ -99,6 +103,7 @@ public class TopicoService {
     @Transactional
     public TopicoCompletoDTO fecharTopico(Long topicoId) {
         Topico topico = buscarTopico(topicoId);
+        validarAutor(topico.getAutor().getId());
         topico.setStatus(EStatusTopico.FECHADO);
         return new TopicoCompletoDTO(topico);
     }
@@ -106,6 +111,7 @@ public class TopicoService {
     @Transactional
     public TopicoCompletoDTO reabrirTopico(Long topicoId) {
         Topico topico = buscarTopico(topicoId);
+        validarAutor(topico.getAutor().getId());
         topico.setStatus(topico.getRespostas().size() == 0 ? EStatusTopico.NAO_RESPONDIDO : EStatusTopico.NAO_SOLUCIONADO);
         return new TopicoCompletoDTO(topico);
     }
@@ -119,5 +125,12 @@ public class TopicoService {
     private Topico buscarTopico(Long topicoId) {
         Optional<Topico> topico = topicoRepository.findById(topicoId);
         return topico.orElseThrow(() -> new ObjetoNaoEncotradoException("Topico com id: " + topicoId + " não encontrado."));
+    }
+
+    private void validarAutor(Long autorId) {
+        Usuario usuario = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(usuario.getId() != autorId) {
+            throw new UsuarioNaoEAutorException("Esse usuario não é o autor desse topico.");
+        }
     }
 }

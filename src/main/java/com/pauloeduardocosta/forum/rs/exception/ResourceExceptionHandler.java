@@ -3,6 +3,7 @@ package com.pauloeduardocosta.forum.rs.exception;
 import com.pauloeduardocosta.forum.dto.CampoInvalidoDTO;
 import com.pauloeduardocosta.forum.service.exception.ObjetoNaoEncotradoException;
 import com.pauloeduardocosta.forum.service.exception.TopicoFechadoException;
+import com.pauloeduardocosta.forum.service.exception.UsuarioNaoEAutorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -49,5 +50,12 @@ public class ResourceExceptionHandler {
         });
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validacaoError);
+    }
+
+    @ExceptionHandler(UsuarioNaoEAutorException.class)
+    public ResponseEntity<StandardError> usuarioIncorreto(UsuarioNaoEAutorException e, HttpServletRequest request) {
+
+        StandardError err = new StandardError(HttpStatus.BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
     }
 }

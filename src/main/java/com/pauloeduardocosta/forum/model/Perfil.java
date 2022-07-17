@@ -1,5 +1,7 @@
 package com.pauloeduardocosta.forum.model;
 
+import org.springframework.security.core.GrantedAuthority;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,7 +10,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "perfis")
-public class Perfil {
+public class Perfil implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,5 +32,10 @@ public class Perfil {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    @Override
+    public String getAuthority() {
+        return nome;
     }
 }

@@ -13,7 +13,9 @@ import com.pauloeduardocosta.forum.repository.ITopicoRepository;
 import com.pauloeduardocosta.forum.repository.IUsuarioRepository;
 import com.pauloeduardocosta.forum.service.exception.ObjetoNaoEncotradoException;
 import com.pauloeduardocosta.forum.service.exception.TopicoFechadoException;
+import com.pauloeduardocosta.forum.service.exception.UsuarioNaoEAutorException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,8 +35,7 @@ public class RespostaService {
 
     @Transactional
     public RespostaDTO criarResposta(NovaRespostaDTO novaRespostaDTO) {
-        //TODO: devera pegar o usuario logado
-        Optional<Usuario> autor = usuarioRepository.findById(novaRespostaDTO.getAutorId());
+        Usuario autor = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<Topico> topicoEncontrado = topicoRepository.findById(novaRespostaDTO.getTopicoId());
         Topico topico = topicoEncontrado.orElseThrow(() -> new ObjetoNaoEncotradoException("Topico com id: " + novaRespostaDTO.getTopicoId() + " não encontrado."));
 
@@ -44,7 +45,7 @@ public class RespostaService {
         if(topico.getStatus() == EStatusTopico.NAO_RESPONDIDO) {
             topico.setStatus(EStatusTopico.NAO_SOLUCIONADO);
         }
-        Resposta resposta = new Resposta(novaRespostaDTO.getMensagem(), topico, autor.get());
+        Resposta resposta = new Resposta(novaRespostaDTO.getMensagem(), topico, autor);
         topico.getRespostas().add(resposta);
         respostaRepository.save(resposta);
 
@@ -54,6 +55,7 @@ public class RespostaService {
     @Transactional
     public RespostaDTO atualizarTopico(Long respostaId, AtualizarRespostaDTO atualizarRespostaDTO) {
         Resposta resposta = buscarResposta(respostaId);
+        validarAutor(resposta.getAutor().getId());
 
         if(atualizarRespostaDTO.getMensagem() != null && !atualizarRespostaDTO.getMensagem().isBlank()) {
             resposta.setMensagem(atualizarRespostaDTO.getMensagem());
@@ -65,5 +67,12 @@ public class RespostaService {
     private Resposta buscarResposta(Long respostaId) {
         Optional<Resposta> resposta = respostaRepository.findById(respostaId);
         return resposta.orElseThrow(() -> new ObjetoNaoEncotradoException("Topico com id: " + respostaId + " não encontrado."));
+    }
+
+    private void validarAutor(Long autorId) {
+        Usuario usuario = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(usuario.getId() != autorId) {
+            throw new UsuarioNaoEAutorException("Esse usuario não é o autor desse resposta.");
+        }
     }
 }
