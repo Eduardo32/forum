@@ -129,8 +129,8 @@ public class TopicoService {
     }
 
     private void validarAutor(Long autorId) {
-        Optional<Usuario> usuario = (Optional<Usuario>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(usuario.get().getId() != autorId) {
+        Optional<Usuario> usuarioLogado = (Optional<Usuario>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(usuarioLogado.get().getId() != autorId) {
             throw new UsuarioNaoEAutorException("Esse usuario não é o autor desse topico.");
         }
     }

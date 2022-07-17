@@ -1,29 +1,20 @@
 package com.pauloeduardocosta.forum.dto;
 
 import com.pauloeduardocosta.forum.model.Usuario;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+@Getter
+@NoArgsConstructor
 public class UsuarioDTO {
 
     private Long id;
-    private String email;
+    private String nome;
+    private String username;
 
     public UsuarioDTO(Usuario usuario) {
         this.id = usuario.getId();
-        this.email = usuario.getEmail();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public static List<UsuarioDTO> converter(List<Usuario> usuarios) {
-        return usuarios.stream().map(UsuarioDTO::new).collect(Collectors.toList());
+        this.nome = usuario.getNome();
+        this.username = usuario.getUsername();
     }
 }

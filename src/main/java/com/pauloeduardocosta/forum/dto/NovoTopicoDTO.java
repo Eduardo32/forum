@@ -1,10 +1,12 @@
 package com.pauloeduardocosta.forum.dto;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
+@Getter
 public class NovoTopicoDTO {
 
     @NotBlank
@@ -14,19 +16,4 @@ public class NovoTopicoDTO {
     @NotBlank
     @Length(min = 10)
     private String mensagem;
-
-    @NotNull
-    private Long idUsuario;
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public String getMensagem() {
-        return mensagem;
-    }
-
-    public Long getIdUsuario() {
-        return idUsuario;
-    }
 }
