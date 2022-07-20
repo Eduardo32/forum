@@ -12,10 +12,10 @@ INSERT INTO usuarios_perfis(usuario_id, perfis_id) VALUES(2, 1);
 INSERT INTO usuarios_perfis(usuario_id, perfis_id) VALUES(3, 1);
 INSERT INTO usuarios_perfis(usuario_id, perfis_id) VALUES(4, 1);
 
-INSERT INTO topicos(data_criacao, mensagem, status, titulo, autor_id) VALUES('2019-05-05 18:00:00', 'Estou com uma duvida em HTML 5', 'NAO_SOLUCIONADO', 'Duvida com HTML 5', 2);
-INSERT INTO topicos(data_criacao, mensagem, status, titulo, autor_id) VALUES('2019-05-05 19:00:00', 'Estou com uma duvida em spring boot', 'NAO_SOLUCIONADO', 'Duvida com Sprng Boot', 2);
-INSERT INTO topicos(data_criacao, mensagem, status, titulo, autor_id) VALUES('2019-05-05 20:00:00', 'Estou com uma duvida em Java 11', 'NAO_RESPONDIDO', 'Duvida com Java', 2);
-INSERT INTO topicos(data_criacao, mensagem, status, titulo, autor_id) VALUES('2022-06-17 22:03:28', 'Estou com uma duvida em node js', 'NAO_RESPONDIDO', 'Duvida com NodeJS', 2);
+INSERT INTO topicos(data_criacao, mensagem, status, titulo, autor_id, tags) VALUES('2019-05-05 18:00:00', 'Estou com uma duvida em HTML 5', 'NAO_SOLUCIONADO', 'Duvida com HTML 5', 2, null);
+INSERT INTO topicos(data_criacao, mensagem, status, titulo, autor_id, tags) VALUES('2019-05-05 19:00:00', 'Estou com uma duvida em spring boot', 'NAO_SOLUCIONADO', 'Duvida com Spring Boot', 2, 'Spring, Spring Boot, Java, Java 17');
+INSERT INTO topicos(data_criacao, mensagem, status, titulo, autor_id, tags) VALUES('2019-05-05 20:00:00', 'Estou com uma duvida em Java 11', 'NAO_RESPONDIDO', 'Duvida com Java', 2, 'Java, Java 8');
+INSERT INTO topicos(data_criacao, mensagem, status, titulo, autor_id, tags) VALUES('2022-06-17 22:03:28', 'Estou com uma duvida em node js', 'NAO_RESPONDIDO', 'Duvida com NodeJS', 2, 'Node, NodeJS');
 
 INSERT INTO respostas(data_criacao, mensagem, solucao, autor_id, topico_id) VALUES('2019-05-06 18:00:00', 'Resposta 01', FALSE, 3, 1);
 INSERT INTO respostas(data_criacao, mensagem, solucao, autor_id, topico_id) VALUES('2019-05-06 19:00:00', 'Resposta 02', FALSE, 3, 1);

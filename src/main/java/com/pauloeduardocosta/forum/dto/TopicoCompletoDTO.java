@@ -20,6 +20,7 @@ public class TopicoCompletoDTO {
     private UsuarioDTO autor;
     private List<RespostaDTO> respostas = new ArrayList<>();
     private String status;
+    private String[] tags;
 
     public TopicoCompletoDTO(Topico topico) {
         this.id = topico.getId();
@@ -29,5 +30,6 @@ public class TopicoCompletoDTO {
         this.autor = topico.getAutor() != null ? new UsuarioDTO(topico.getAutor()) : null;
         this.status = topico.getStatus().toString();
         this.respostas.addAll(topico.getRespostas().stream().map(RespostaDTO::new).collect(Collectors.toList()));
+        this.tags = topico.getTags() != null ? topico.getTags().split(", ") : null;
     }
 }

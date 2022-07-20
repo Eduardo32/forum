@@ -46,6 +46,8 @@ public class Topico {
 	@NonNull
 	private Usuario autor;
 
+	private String tags;
+
 	@OneToMany(mappedBy = "topico", cascade = CascadeType.REMOVE)
 	private List<Resposta> respostas = new ArrayList<>();
 }

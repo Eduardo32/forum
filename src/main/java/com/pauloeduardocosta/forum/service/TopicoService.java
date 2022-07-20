@@ -1,6 +1,5 @@
 package com.pauloeduardocosta.forum.service;
 
-import com.pauloeduardocosta.forum.data.UsuarioDetalhes;
 import com.pauloeduardocosta.forum.dto.AtualizarTopicoDTO;
 import com.pauloeduardocosta.forum.dto.NovoTopicoDTO;
 import com.pauloeduardocosta.forum.dto.TopicoCompletoDTO;
@@ -14,6 +13,7 @@ import com.pauloeduardocosta.forum.repository.ITopicoRepository;
 import com.pauloeduardocosta.forum.repository.IUsuarioRepository;
 import com.pauloeduardocosta.forum.service.exception.ObjetoNaoEncotradoException;
 import com.pauloeduardocosta.forum.service.exception.UsuarioNaoEAutorException;
+import com.pauloeduardocosta.forum.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,6 +35,9 @@ public class TopicoService {
 
     @Autowired
     private IRespostaRepository respostaRepository;
+
+    @Autowired
+    private TagService tagService;
 
     public Page<TopicoDTO> buscarTodos(Pageable paginacao) {
         Page<Topico> topicos = topicoRepository.findAll(paginacao);
@@ -51,8 +55,11 @@ public class TopicoService {
 
     @Transactional
     public TopicoCompletoDTO criarTopico(NovoTopicoDTO novoTopicoDTO) {
-        Optional<Usuario> usuario = (Optional<Usuario>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Topico topico = new Topico(novoTopicoDTO.getTitulo(), novoTopicoDTO.getMensagem(), usuario.get());
+        Usuario usuario = buscarUsuarioLogado();
+        List<String> tagsSalvas = tagService.verificarTagNovas(novoTopicoDTO.getTags());
+        String tags = StringUtils.converterParaStringSeparadaPorVirgula(tagsSalvas);
+        Topico topico = new Topico(novoTopicoDTO.getTitulo(), novoTopicoDTO.getMensagem(), usuario);
+        topico.setTags(tags);
         topicoRepository.save(topico);
         return new TopicoCompletoDTO(topico);
     }
@@ -129,9 +136,14 @@ public class TopicoService {
     }
 
     private void validarAutor(Long autorId) {
-        Optional<Usuario> usuarioLogado = (Optional<Usuario>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(usuarioLogado.get().getId() != autorId) {
+        Usuario usuario = buscarUsuarioLogado();
+        if(usuario.getId() != autorId) {
             throw new UsuarioNaoEAutorException("Esse usuario não é o autor desse topico.");
         }
+    }
+
+    private Usuario buscarUsuarioLogado() {
+        Optional<Usuario> usuarioLogado = (Optional<Usuario>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return usuarioLogado.get();
     }
 }

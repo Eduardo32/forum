@@ -17,6 +17,7 @@ public class TopicoDTO {
     private UsuarioDTO autor;
     private String status;
     private Integer qtdRespostas;
+    private String[] tags;
 
     public TopicoDTO(Topico topico) {
         this.id = topico.getId();
@@ -26,6 +27,7 @@ public class TopicoDTO {
         this.autor = topico.getAutor() != null ? new UsuarioDTO(topico.getAutor()) : null;
         this.status = topico.getStatus().toString();
         this.qtdRespostas = topico.getRespostas().size();
+        this.tags = topico.getTags() != null ? topico.getTags().split(", ") : null;
     }
 
     public static Page<TopicoDTO> converter(Page<Topico> topicos) {
