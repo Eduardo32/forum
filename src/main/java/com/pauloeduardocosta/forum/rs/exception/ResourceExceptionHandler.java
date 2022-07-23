@@ -1,7 +1,9 @@
 package com.pauloeduardocosta.forum.rs.exception;
 
 import com.pauloeduardocosta.forum.dto.CampoInvalidoDTO;
+import com.pauloeduardocosta.forum.service.exception.ContaNaoExisteException;
 import com.pauloeduardocosta.forum.service.exception.EmailJaCadastradoException;
+import com.pauloeduardocosta.forum.service.exception.FalhaNoEnvioDeEmailException;
 import com.pauloeduardocosta.forum.service.exception.ObjetoNaoEncotradoException;
 import com.pauloeduardocosta.forum.service.exception.TopicoFechadoException;
 import com.pauloeduardocosta.forum.service.exception.UsernameJaUtilizadoException;
@@ -73,5 +75,19 @@ public class ResourceExceptionHandler {
 
         StandardError err = new StandardError(HttpStatus.BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
+
+    @ExceptionHandler(ContaNaoExisteException.class)
+    public ResponseEntity<StandardError> contaNãoExiste(ContaNaoExisteException e, HttpServletRequest request) {
+
+        StandardError err = new StandardError(HttpStatus.BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
+
+    @ExceptionHandler(FalhaNoEnvioDeEmailException.class)
+    public ResponseEntity<StandardError> falhaNoEnvioDeEmail(FalhaNoEnvioDeEmailException e, HttpServletRequest request) {
+
+        StandardError err = new StandardError(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage(), System.currentTimeMillis());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(err);
     }
 }

@@ -3,8 +3,8 @@ package com.pauloeduardocosta.forum.model.enums;
 public enum ETipoToken {
     BEARER(1, "Bearer");
 
-    private int cod;
-    private String descricao;
+    private final int cod;
+    private final String descricao;
 
     ETipoToken(int cod, String descricao) {
         this.cod = cod;

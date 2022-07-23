@@ -1,12 +1,21 @@
 package com.pauloeduardocosta.forum.data;
 
+import com.pauloeduardocosta.forum.model.SenhaTemporaria;
 import com.pauloeduardocosta.forum.model.Usuario;
+import com.pauloeduardocosta.forum.service.UsuarioService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.Collection;
 import java.util.Optional;
 
+@Component
 public class UsuarioDetalhes implements UserDetails {
 
     private Optional<Usuario> usuario;
@@ -26,7 +35,12 @@ public class UsuarioDetalhes implements UserDetails {
 
     @Override
     public String getPassword() {
-        return usuario.orElse(new Usuario()).getSenha();
+        String senha = usuario.orElse(new Usuario()).getSenha();
+        String senhaTemporaria = buscarSenhaTemporaria();
+        if(senhaTemporaria != null) {
+            senha = senhaTemporaria;
+        }
+        return senha;
     }
 
     @Override
@@ -41,7 +55,7 @@ public class UsuarioDetalhes implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return usuario.orElse(new Usuario()).getEmailVerificado();
     }
 
     @Override
@@ -53,4 +67,34 @@ public class UsuarioDetalhes implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    private String buscarSenhaTemporaria() {
+        SenhaTemporaria senhaTemporaria = usuario.orElse(new Usuario()).getSenhaTemporaria();
+        if(senhaTemporaria != null && validarSenhaTemporaris(senhaTemporaria)) {
+            return senhaTemporaria.getSenha();
+        }
+        return null;
+    }
+
+    private boolean validarSenhaTemporaris(SenhaTemporaria senhaTemporaria) {
+        LocalDateTime agora = LocalDateTime.now();
+        return senhaTemporaria.getDataValidade().isEqual(agora) || senhaTemporaria.getDataValidade().isAfter(agora);
+    }
+/*
+    public static void main(String[] args) {
+        LocalDateTime agora = LocalDateTime.now();
+        LocalDateTime depois = agora.plus(1L, ChronoUnit.MINUTES);
+        LocalDateTime antes = agora.minus(1L, ChronoUnit.MINUTES);
+
+        System.out.println(agora);
+        System.out.println(depois);
+        System.out.println(antes);
+
+        System.out.println(agora.isAfter(antes));
+        System.out.println(agora.isAfter(agora));
+        System.out.println(agora.isAfter(depois));
+        System.out.println(depois.isagora));
+
+
+    }*/
 }
