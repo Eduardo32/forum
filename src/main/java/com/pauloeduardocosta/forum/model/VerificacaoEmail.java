@@ -20,7 +20,6 @@ public class VerificacaoEmail {
 
     @MongoId(FieldType.OBJECT_ID)
     private String id;
-
     private String uuid = UUID.randomUUID().toString();
 
     @NonNull

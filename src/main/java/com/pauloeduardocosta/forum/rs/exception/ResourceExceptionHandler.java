@@ -29,14 +29,12 @@ public class ResourceExceptionHandler {
 
     @ExceptionHandler(ObjetoNaoEncotradoException.class)
     public ResponseEntity<StandardError> objetoNaoEncontrado(ObjetoNaoEncotradoException e, HttpServletRequest request) {
-
         StandardError err = new StandardError(HttpStatus.NOT_FOUND.value(), e.getMessage(), System.currentTimeMillis());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
     }
 
     @ExceptionHandler(TopicoFechadoException.class)
     public ResponseEntity<StandardError> topicoFechado(TopicoFechadoException e, HttpServletRequest request) {
-
         StandardError err = new StandardError(HttpStatus.BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
     }
@@ -58,35 +56,30 @@ public class ResourceExceptionHandler {
 
     @ExceptionHandler(UsuarioNaoEAutorException.class)
     public ResponseEntity<StandardError> usuarioIncorreto(UsuarioNaoEAutorException e, HttpServletRequest request) {
-
         StandardError err = new StandardError(HttpStatus.BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
     }
 
     @ExceptionHandler(EmailJaCadastradoException.class)
     public ResponseEntity<StandardError> emailJaCadastrado(EmailJaCadastradoException e, HttpServletRequest request) {
-
         StandardError err = new StandardError(HttpStatus.BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
     }
 
     @ExceptionHandler(UsernameJaUtilizadoException.class)
     public ResponseEntity<StandardError> usernameJaUtilizado(UsernameJaUtilizadoException e, HttpServletRequest request) {
-
         StandardError err = new StandardError(HttpStatus.BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
     }
 
     @ExceptionHandler(ContaNaoExisteException.class)
     public ResponseEntity<StandardError> contaNãoExiste(ContaNaoExisteException e, HttpServletRequest request) {
-
         StandardError err = new StandardError(HttpStatus.BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
     }
 
     @ExceptionHandler(FalhaNoEnvioDeEmailException.class)
     public ResponseEntity<StandardError> falhaNoEnvioDeEmail(FalhaNoEnvioDeEmailException e, HttpServletRequest request) {
-
         StandardError err = new StandardError(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage(), System.currentTimeMillis());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(err);
     }

@@ -2,16 +2,11 @@ package com.pauloeduardocosta.forum.data;
 
 import com.pauloeduardocosta.forum.model.SenhaTemporaria;
 import com.pauloeduardocosta.forum.model.Usuario;
-import com.pauloeduardocosta.forum.service.UsuarioService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -80,21 +75,4 @@ public class UsuarioDetalhes implements UserDetails {
         LocalDateTime agora = LocalDateTime.now();
         return senhaTemporaria.getDataValidade().isEqual(agora) || senhaTemporaria.getDataValidade().isAfter(agora);
     }
-/*
-    public static void main(String[] args) {
-        LocalDateTime agora = LocalDateTime.now();
-        LocalDateTime depois = agora.plus(1L, ChronoUnit.MINUTES);
-        LocalDateTime antes = agora.minus(1L, ChronoUnit.MINUTES);
-
-        System.out.println(agora);
-        System.out.println(depois);
-        System.out.println(antes);
-
-        System.out.println(agora.isAfter(antes));
-        System.out.println(agora.isAfter(agora));
-        System.out.println(agora.isAfter(depois));
-        System.out.println(depois.isagora));
-
-
-    }*/
 }

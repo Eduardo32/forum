@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
-
 public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
 
     private TokenServise tokenService;
@@ -29,7 +28,7 @@ public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        String token = reuperarToken(request);
+        String token = recuperarToken(request);
         Boolean valido = tokenService.isTokenValido(token);
         if(valido) {
             autenticarCliente(token);
@@ -46,7 +45,7 @@ public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
-    private String reuperarToken(HttpServletRequest request) {
+    private String recuperarToken(HttpServletRequest request) {
         String authorization = request.getHeader("Authorization");
 
         if(authorization == null || authorization.isEmpty() || !authorization.startsWith("Bearer ")) {
