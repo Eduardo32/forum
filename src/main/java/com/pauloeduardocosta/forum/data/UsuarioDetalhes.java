@@ -50,7 +50,7 @@ public class UsuarioDetalhes implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return usuario.orElse(new Usuario()).getEmailVerificado();
+        return usuario.orElse(new Usuario()).getVerificacaoEmail().getVerificado();
     }
 
     @Override

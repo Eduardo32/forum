@@ -2,10 +2,15 @@
 INSERT INTO perfis(nome) VALUES('ROLE_USUARIO');
 INSERT INTO perfis(nome) VALUES('ROLE_ADMIN');
 
-INSERT INTO usuarios(nome, email, username, senha, email_verificado) VALUES('Administrador', 'admin@email.com', 'admin', '$2a$10$..BbYZDEPCujwGSDt.DUOOKFvj6WPJL23X4rHOUuO1Rsdr./oUjiC', TRUE);
-INSERT INTO usuarios(nome, email, username, senha, email_verificado) VALUES('Usuario 01', 'usuario01@email.com', 'usuario01', '$2a$10$..BbYZDEPCujwGSDt.DUOOKFvj6WPJL23X4rHOUuO1Rsdr./oUjiC', TRUE);
-INSERT INTO usuarios(nome, email, username, senha, email_verificado) VALUES('Usuario 02', 'usuario02@email.com', 'usuario02', '$2a$10$..BbYZDEPCujwGSDt.DUOOKFvj6WPJL23X4rHOUuO1Rsdr./oUjiC', TRUE);
-INSERT INTO usuarios(nome, email, username, senha, email_verificado) VALUES('Eu', 'eu@email.com', 'eu', '$2a$10$..BbYZDEPCujwGSDt.DUOOKFvj6WPJL23X4rHOUuO1Rsdr./oUjiC', TRUE);
+INSERT INTO verificacao_email(uuid, data_criacao, data_verificacao, verificado) VALUES('1d33c32f-9e6e-4d4b-8b0d-2d52ac623b9c', '2019-05-05 18:00:00', '2019-05-05 18:00:00', TRUE);
+INSERT INTO verificacao_email(uuid, data_criacao, data_verificacao, verificado) VALUES('e5574f59-61c5-41e0-bc2c-70eef094404f', '2019-05-05 18:00:00', '2019-05-05 18:00:00', TRUE);
+INSERT INTO verificacao_email(uuid, data_criacao, data_verificacao, verificado) VALUES('76deaaaf-3cd9-4797-a9f5-3c0034079209', '2019-05-05 18:00:00', '2019-05-05 18:00:00', TRUE);
+INSERT INTO verificacao_email(uuid, data_criacao, data_verificacao, verificado) VALUES('1009ae18-2db9-487b-bade-622f6521b596', '2019-05-05 18:00:00', '2019-05-05 18:00:00', TRUE);
+
+INSERT INTO usuarios(nome, email, username, senha, verificacao_email_id) VALUES('Administrador', 'admin@email.com', 'admin', '$2a$10$..BbYZDEPCujwGSDt.DUOOKFvj6WPJL23X4rHOUuO1Rsdr./oUjiC', 1);
+INSERT INTO usuarios(nome, email, username, senha, verificacao_email_id) VALUES('Usuario 01', 'usuario01@email.com', 'usuario01', '$2a$10$..BbYZDEPCujwGSDt.DUOOKFvj6WPJL23X4rHOUuO1Rsdr./oUjiC', 2);
+INSERT INTO usuarios(nome, email, username, senha, verificacao_email_id) VALUES('Usuario 02', 'usuario02@email.com', 'usuario02', '$2a$10$..BbYZDEPCujwGSDt.DUOOKFvj6WPJL23X4rHOUuO1Rsdr./oUjiC', 3);
+INSERT INTO usuarios(nome, email, username, senha, verificacao_email_id) VALUES('Eu', 'eu@email.com', 'eu', '$2a$10$..BbYZDEPCujwGSDt.DUOOKFvj6WPJL23X4rHOUuO1Rsdr./oUjiC', 4);
 
 INSERT INTO usuarios_perfis(usuario_id, perfis_id) VALUES(1, 2);
 INSERT INTO usuarios_perfis(usuario_id, perfis_id) VALUES(2, 1);

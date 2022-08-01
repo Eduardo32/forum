@@ -5,10 +5,8 @@ import com.pauloeduardocosta.forum.dto.UsuarioDTO;
 import com.pauloeduardocosta.forum.model.Perfil;
 import com.pauloeduardocosta.forum.model.SenhaTemporaria;
 import com.pauloeduardocosta.forum.model.Usuario;
-import com.pauloeduardocosta.forum.model.VerificacaoEmail;
 import com.pauloeduardocosta.forum.repository.IPerfilRepository;
 import com.pauloeduardocosta.forum.repository.IUsuarioRepository;
-import com.pauloeduardocosta.forum.repository.IVerificacaoEmailRepository;
 import com.pauloeduardocosta.forum.service.exception.ContaNaoExisteException;
 import com.pauloeduardocosta.forum.service.exception.EmailJaCadastradoException;
 import com.pauloeduardocosta.forum.service.exception.ObjetoNaoEncotradoException;
@@ -20,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -35,9 +34,6 @@ public class UsuarioService {
     private EmailService emailService;
 
     @Autowired
-    private IVerificacaoEmailRepository verificacaoEmailRepository;
-
-    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Value("${forum.email.temporario.validade.validade.minutos}")
@@ -45,33 +41,24 @@ public class UsuarioService {
 
     private static final Long ID_PERFIL_USUARIO = 1L;
 
-    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
     @Transactional
     public UsuarioDTO salvarUsuario(NovoUsuarioDTO novoUsuarioDTO) {
-        verificarUsernameEEmail(novoUsuarioDTO);
         Usuario usuario = new Usuario(novoUsuarioDTO.getNome(), novoUsuarioDTO.getUsername(), novoUsuarioDTO.getEmail());
         Optional<Perfil> perfil = perfilRepository.findById(ID_PERFIL_USUARIO);
-        usuario.setSenha(encoder.encode(novoUsuarioDTO.getSenha()));
+        usuario.setSenha(bCryptPasswordEncoder.encode(novoUsuarioDTO.getSenha()));
         usuario.getPerfis().add(perfil.get());
         usuarioRepository.save(usuario);
-        VerificacaoEmail verificacaoEmail = new VerificacaoEmail(usuario.getId());
-        verificacaoEmailRepository.save(verificacaoEmail);
-
-        emailService.enviarEmailVerificacao(usuario, verificacaoEmail.getUuid());
+        emailService.enviarEmailVerificacao(usuario);
 
         return new UsuarioDTO(usuario);
     }
 
     @Transactional
     public void verificarConta(String uuid) {
-        VerificacaoEmail verificacaoEmail = verificarUUID(uuid);
-        Optional<Usuario> usuario = usuarioRepository.findById(verificacaoEmail.getUsuarioId());
-        if(verificacaoEmail.getVerificado() == false) {
-            verificacaoEmail.setVerificado(true);
-            usuario.get().setEmailVerificado(true);
-            verificacaoEmailRepository.save(verificacaoEmail);
-            usuarioRepository.save(usuario.get());
+        Usuario usuario = verificarUUID(uuid);
+        if(usuario.getVerificacaoEmail().getVerificado() == false) {
+            usuario.getVerificacaoEmail().setVerificado(true);
+            usuario.getVerificacaoEmail().setDataVerificacao(LocalDateTime.now());
         }
     }
 
@@ -111,9 +98,9 @@ public class UsuarioService {
         }
     }
 
-    private VerificacaoEmail verificarUUID(String uuid) {
-        Optional<VerificacaoEmail> verificacaoEmail = verificacaoEmailRepository.findByUuid(uuid);
-        return verificacaoEmail.orElseThrow(() -> new ContaNaoExisteException("Essa conta não exite."));
+    private Usuario verificarUUID(String uuid) {
+        Optional<Usuario> usuario = usuarioRepository.findByVerificacaoEmailUuid(uuid);
+        return usuario.orElseThrow(() -> new ContaNaoExisteException("Essa conta não exite."));
     }
 
     private String gerarSenhaTemporaria() {

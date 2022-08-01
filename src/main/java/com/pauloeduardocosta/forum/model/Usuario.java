@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -43,9 +42,10 @@ public class Usuario {
 	private String senha;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	private SenhaTemporaria senhaTemporaria;
+	private VerificacaoEmail verificacaoEmail = new VerificacaoEmail();
 
-	private Boolean emailVerificado = false;
+	@OneToOne(cascade = CascadeType.ALL)
+	private SenhaTemporaria senhaTemporaria;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Perfil> perfis = new ArrayList<>();

@@ -20,12 +20,12 @@ public class EmailService {
     @Value("${forum.email.temporario.validade.validade.minutos}")
     private Long validadeSenhaTemporaris;
 
-    public void enviarEmailVerificacao(Usuario usuario, String uuid) {
+    public void enviarEmailVerificacao(Usuario usuario) {
         try {
             final String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
             MimeMessage email = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(email);
-            String link = "<a href=\"" + baseUrl + "/api/usuarios/verificar-conta/" + uuid + "\">aqui</a>";
+            String link = "<a href=\"" + baseUrl + "/api/usuarios/verificar-conta/" + usuario.getVerificacaoEmail().getUuid() + "\">aqui</a>";
             StringBuilder mensagem = new StringBuilder()
                     .append("<p>Olá,</p>")
                     .append("<p>Bem-vinda ao forum.</p>")
