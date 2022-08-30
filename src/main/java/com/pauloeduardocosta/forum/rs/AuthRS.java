@@ -20,12 +20,7 @@ public class AuthRS {
 
     @PostMapping
     public ResponseEntity<TokenDTO> autenticar(@RequestBody LoginDTO loginDTO) {
-        try {
             TokenDTO tokenDTO = authService.autenticar(loginDTO);
             return ResponseEntity.ok(tokenDTO);
-        } catch (AuthenticationException e) {
-            return ResponseEntity.badRequest().build();
-        }
-
     }
 }

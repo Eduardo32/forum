@@ -39,7 +39,7 @@ public class EmailService {
             mailSender.send(email);
         } catch (Exception e) {
             e.printStackTrace();
-            throw  new FalhaNoEnvioDeEmailException("Por favor, tente novamente mais tarde.");
+            throw new FalhaNoEnvioDeEmailException("Por favor, tente novamente mais tarde.");
         }
     }
 

@@ -20,6 +20,9 @@ public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
     private TokenServise tokenService;
     private IUsuarioRepository usuarioRepository;
 
+    private static final String AUTH_HEADER = "Authorization";
+    private static final String TOKEN_PREFIXO = "Bearer ";
+
     public AutenticacaoViaTokenFilter(TokenServise tokenService, IUsuarioRepository usuarioRepository) {
         this.tokenService = tokenService;
         this.usuarioRepository = usuarioRepository;
@@ -46,12 +49,10 @@ public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
     }
 
     private String recuperarToken(HttpServletRequest request) {
-        String authorization = request.getHeader("Authorization");
-
-        if(authorization == null || authorization.isEmpty() || !authorization.startsWith("Bearer ")) {
+        String authorization = request.getHeader(AUTH_HEADER);
+        if(authorization == null || authorization.isEmpty() || !authorization.startsWith(TOKEN_PREFIXO)) {
             return null;
         }
-
         return authorization.split(" ")[1];
     }
 }
